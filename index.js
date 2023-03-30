@@ -1,9 +1,11 @@
 const userTab = document.querySelector("[data-userWeather]");
 const searchTab = document.querySelector("[data-searchWeather]");
 const userContainer = document.querySelector("[.weather-container]");
+
 const grantAccessContainer = document.querySelector(
   "[.grant-access-container]"
 );
+
 const searchForm = document.querySelector("[data-searchForm]");
 
 const loadingScreen = document.querySelector("[.loading-container]");
@@ -22,6 +24,7 @@ function switchTab(newTab) {
     oldTab = newTab;
     oldTab.classList.add("current-tab");
   }
+
   if (!searchForm.classList.contains("active")) {
     //kya search form wala container is invisible, if yes then make it visible
     userInfoContainer.classList.remove("active");
@@ -47,3 +50,42 @@ searchTab.addEventListener("click", () => {
   //pass clicked tab as input paramter
   switchTab(userTab);
 });
+
+//check , if co-oridinates are already present in session storage
+function getfromSessionStorage() {
+  const localCoordinates = sessionStorage.getItem("user-coordinates");
+
+  if (!localCoordinates) {
+    //agar local cooridinates are not present in session storages
+    grantAccessContainer.classList.add("active");
+  } else {
+    const coordinates = JSON.parse(localCoordinates);
+    fetchUserWeatherInfo(coordinates);
+  }
+}
+
+async function fetchUserWeatherInfo(coordinates) {
+  const { lat, lon } = coordinates;
+
+  //make grantAccess container invisible
+  grantAccessContainer.classList.remove("active");
+  //make loading screen visible
+  loadingScreen.classList.add("active");
+
+  //API call to get weather information
+
+  try {
+    const response = await fetch(
+      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`
+    );
+
+    const data = await response.JSON();
+
+    loadingScreen.classList.remove("active");
+    userInfoContainer.classList.add("active");
+    renderWeatherInfo(data);
+  } catch (err) {
+    loadingScreen.classList.remove("active");
+    //HW
+  }
+}
