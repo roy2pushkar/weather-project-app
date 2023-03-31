@@ -89,3 +89,20 @@ async function fetchUserWeatherInfo(coordinates) {
     //HW
   }
 }
+
+function renderWeatherInfo(weatherInfo) {
+  //firstly we have to fetch the elements
+  const cityName = document.querySelector("[data-cityNmae]");
+  const countryIcon = document.querySelector("[data-countryIcon]");
+
+  const desc = document.querySelector("[data-weatherDesc]");
+  const weatherIcon = document.querySelector("[data-weatherIcon]");
+  const temp = document.querySelector("[data-temp]");
+  const windspeed = document.querySelector("[data-windspeed]");
+  const humidity = document.querySelector("[data-humidity]");
+  const cloudiness = document.querySelector("[data-cloudiness]");
+
+  console.log(weatherInfo);
+
+  //fetch values from weatherINfo object and put it UI elements
+}
