@@ -23,20 +23,20 @@ function switchTab(newTab) {
     oldTab.classList.remove("current-tab");
     oldTab = newTab;
     oldTab.classList.add("current-tab");
-  }
 
-  if (!searchForm.classList.contains("active")) {
-    //kya search form wala container is invisible, if yes then make it visible
-    userInfoContainer.classList.remove("active");
-    grantAccessContainer.classList.remove("active");
-    searchForm.classList.add("active");
-  } else {
-    //main pehle search wale tab pr tha, ab your weather tab visible karna h
-    searchForm.classList.remove("active");
-    userInfoContainer.classList.remove("active");
-    //ab main your weather tab me aagya hu, toh weather bhi display karna poadega, so let's check local storage first
-    //for coordinates, if we haved saved them there.
-    getfromSessionStorage();
+    if (!searchForm.classList.contains("active")) {
+      //kya search form wala container is invisible, if yes then make it visible
+      userInfoContainer.classList.remove("active");
+      grantAccessContainer.classList.remove("active");
+      searchForm.classList.add("active");
+    } else {
+      //main pehle search wale tab pr tha, ab your weather tab visible karna h
+      searchForm.classList.remove("active");
+      userInfoContainer.classList.remove("active");
+      //ab main your weather tab me aagya hu, toh weather bhi display karna poadega, so let's check local storage first
+      //for coordinates, if we haved saved them there.
+      getfromSessionStorage();
+    }
   }
 }
 //Add event Listeners to users tab
@@ -48,7 +48,7 @@ userTab.addEventListener("click", () => {
 //Add event Listeners to search tab
 searchTab.addEventListener("click", () => {
   //pass clicked tab as input paramter
-  switchTab(userTab);
+  switchTab(searchTab);
 });
 
 //check , if co-oridinates are already present in session storage
@@ -115,4 +115,50 @@ function renderWeatherInfo(weatherInfo) {
   windspeed.innerText = `${weatherInfo?.wind?.speed} m/s`;
   humidity.innerText = `${weatherInfo?.main?.humidity}%`;
   cloudiness.innerText = `${weatherInfo?.clouds?.all}%`;
+}
+
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition);
+  } else {
+    //HW - show an alert for no geolocation support available
+  }
+}
+
+function showPosition(position) {
+  const userCoordinates = {
+    lat: position.coords.latitude,
+    lon: position.coords.longitude,
+  };
+  sessionStorage.setItem("user-coordinates", JSON.stringify(userCoordinates));
+  fetchUserWeatherInfo(userCoordinates);
+}
+
+const grantAccessButton = document.querySelector("[data-grantAccess]");
+grantAccessButton.addEventListener("click", getLocation);
+
+const searchInput = document.querySelector("[data-searchInput]");
+
+searchForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  let cityName = searchInput.ariaValueMax;
+
+  if (cityName === " ") {
+    return;
+  }
+  else{
+    fetchSearchWeatherInfo(cityName);
+  }
+})
+
+async function fetchSearchWeatherInfo(city)
+{
+  loadingScreen.classList.add("active");
+  userInfoContainer.classList.remove("active");
+  grantAccessContainer.classList.remove("active");
+
+  try{
+    
+  }
+
 }
