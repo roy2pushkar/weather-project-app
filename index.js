@@ -1,15 +1,15 @@
 const userTab = document.querySelector("[data-userWeather]");
 const searchTab = document.querySelector("[data-searchWeather]");
-const userContainer = document.querySelector("[.weather-container]");
+const userContainer = document.querySelector(".weather-container");
 
 const grantAccessContainer = document.querySelector(
-  "[.grant-access-container]"
+  "(.grant-location-container)"
 );
 
 const searchForm = document.querySelector("[data-searchForm]");
 
-const loadingScreen = document.querySelector("[.loading-container]");
-const userInfoContainer = document.querySelector("[.user-info-container]");
+const loadingScreen = document.querySelector(".loading-container");
+const userInfoContainer = document.querySelector(".user-info-container");
 
 //initially vairables need????
 
@@ -39,6 +39,7 @@ function switchTab(newTab) {
     }
   }
 }
+
 //Add event Listeners to users tab
 userTab.addEventListener("click", () => {
   //pass clicked tab as input paramter
@@ -79,7 +80,7 @@ async function fetchUserWeatherInfo(coordinates) {
       `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`
     );
 
-    const data = await response.JSON();
+    const data = await response.json();
 
     loadingScreen.classList.remove("active");
     userInfoContainer.classList.add("active");
@@ -92,7 +93,7 @@ async function fetchUserWeatherInfo(coordinates) {
 
 function renderWeatherInfo(weatherInfo) {
   //firstly we have to fetch the elements
-  const cityName = document.querySelector("[data-cityNmae]");
+  const cityName = document.querySelector("[data-cityName]");
   const countryIcon = document.querySelector("[data-countryIcon]");
 
   const desc = document.querySelector("[data-weatherDesc]");
@@ -141,24 +142,29 @@ const searchInput = document.querySelector("[data-searchInput]");
 
 searchForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  let cityName = searchInput.ariaValueMax;
+  let cityName = searchInput.Value;
 
   if (cityName === " ") {
     return;
-  }
-  else{
+  } else {
     fetchSearchWeatherInfo(cityName);
   }
-})
+});
 
-async function fetchSearchWeatherInfo(city)
-{
+async function fetchSearchWeatherInfo(city) {
   loadingScreen.classList.add("active");
   userInfoContainer.classList.remove("active");
   grantAccessContainer.classList.remove("active");
 
-  try{
-    
+  try {
+    const response = await fetch(
+      `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`
+    );
+    const data = await response.json();
+    loadingScreen.classList.remove("active");
+    userInfoContainer.classList.add("active");
+    renderWeatherInfo(data);
+  } catch (err) {
+    //hW
   }
-
 }
