@@ -108,10 +108,10 @@ function renderWeatherInfo(weatherInfo) {
   temp.innerText = `${weatherInfo?.main?.temp} °C`;
   windspeed.innerText = `${weatherInfo?.wind?.speed} m/s`;
   humidity.innerText = `${weatherInfo?.main?.humidity}%`;
-  pressure.innerText = `${weatherInfo?.main?.pressure}%`;
+  pressure.innerText = `${weatherInfo?.main?.pressure}mbar`;
   cloudiness.innerText = `${weatherInfo?.clouds?.all}%`;
-  sunrise.innerText = `${weatherInfo?.sys?.sunrise}%`;
-  sunset.innerText = `${weatherInfo?.sys?.sunset}%`;
+  sunrise.innerText = `${weatherInfo?.sys?.sunrise}AM`;
+  sunset.innerText = `${weatherInfo?.sys?.sunset}PM`;
 }
 
 function getLocation() {
